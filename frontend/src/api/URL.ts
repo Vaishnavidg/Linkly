@@ -1,6 +1,6 @@
 import { normalizeUrl } from "../lib/url";
 
-const API_URL = import.meta.env.VITE_BACKEND_API_URL || "http://localhost:8000";
+const API_URL = import.meta.env.VITE_BACKEND_API_URL || "";
 
 const token = localStorage.getItem("token");
 
@@ -83,7 +83,7 @@ export const getShortUrlApiUrl = async(url: string) => {
 };
 
 export const getUserUrls = async() => {
-
+  console.log("api url", API_URL);
   try{
     const response = await fetch(`${API_URL}/user-urls`, {
       method: "GET",

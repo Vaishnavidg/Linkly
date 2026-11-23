@@ -1,4 +1,4 @@
-const API_URL = import.meta.env.VITE_BACKEND_API_URL || "http://localhost:8000";
+const API_URL = import.meta.env.VITE_BACKEND_API_URL || "";
 
 export const signupUser = async (username: string, email: string, password: string) => {
     try {
