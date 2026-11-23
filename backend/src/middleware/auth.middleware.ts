@@ -1,4 +1,4 @@
-const JWT_SECRET = process.env.JWT_SECRET || "mongodb://localhost:27017/";
+const MONGO_URI = process.env.MONGO_URI || "";
 
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
@@ -32,7 +32,7 @@ export const verifyToken = (
 
         const decoded = jwt.verify(
             token,
-            JWT_SECRET
+            MONGO_URI
         ) as JwtPayload;
 
         console.log("Decoded token:", decoded);

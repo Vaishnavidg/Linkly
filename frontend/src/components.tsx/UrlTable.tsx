@@ -28,7 +28,7 @@ export function UrlTable({ urls }: UrlTableProps) {
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
   async function handleCopy(url: ShortUrl) {
-    const ok = await copyToClipboard(url.shortUrl);
+    const ok = await copyToClipboard(MAIN_API + url.shortId);
     if (ok) {
       setCopiedId(url.id);
       window.setTimeout(

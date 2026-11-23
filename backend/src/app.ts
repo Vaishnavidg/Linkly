@@ -3,6 +3,8 @@ import urlRoutes from './routes/url.js';
 import userRoutes from './routes/user.js';
 import cors from 'cors';
 const app = express();
+import dotenv from "dotenv";
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -19,5 +21,7 @@ app.use(
 
 app.use('/', urlRoutes);
 app.use('/user', userRoutes);
+
+dotenv.config();
 
 export default app;

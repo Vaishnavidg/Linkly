@@ -30,6 +30,7 @@ export default function DashboardPage() {
   const [loadingUrls, setLoadingUrls] = useState(false);
   const [urls, setUserUrls] = useState([]);
   const [totalClicks, setTotalClicks] = useState(0);
+  const [refreshUrls, setRefreshUrls] = useState(0);
 
   useEffect(() => {
     if (ready && !user) {
@@ -43,6 +44,7 @@ export default function DashboardPage() {
     setCreating(true);
     try {
       const result = await getShortUrlApiUrl(url);
+
       console.log("Short URL result:", result);
       if (!result) {
         throw new Error("Failed to shorten the URL. Please try again.");
@@ -50,6 +52,7 @@ export default function DashboardPage() {
 
       setResult(result.shortId);
       setUrl("");
+      setRefreshUrls((prev) => prev + 1);
     } catch (err) {
       setCreateError(
         err instanceof Error
@@ -89,7 +92,7 @@ export default function DashboardPage() {
     };
 
     fetchUserUrls();
-  }, [user]);
+  }, [user, refreshUrls]);
 
   useEffect(() => {
     const totalClicks = urls.reduce(
@@ -174,8 +177,6 @@ export default function DashboardPage() {
             value={totalClicks}
             icon={MousePointerClick}
           />
-
-          {/* <StatCard label="Active Links" value={activeLinks} icon={Activity} /> */}
         </Box>
 
         {/* Create Short URL Section */}
