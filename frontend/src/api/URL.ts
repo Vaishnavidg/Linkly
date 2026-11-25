@@ -1,6 +1,6 @@
 import { normalizeUrl } from "../lib/url";
 
-const API_URL = import.meta.env.VITE_BACKEND_API_URL || "http://localhost:8000";
+export const API_URL = import.meta.env.VITE_BACKEND_API_URL || "http://localhost:8000";
 
 // Read at call time: a module-level read runs before sign-in and stays null.
 const getToken = () => localStorage.getItem("token");
