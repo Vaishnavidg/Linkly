@@ -1,56 +1,21 @@
-const API_URL = import.meta.env.VITE_BACKEND_API_URL || "";
+import { API_URL } from "./config";
 
-export const signupUser = async (username: string, email: string, password: string) => {
-    try {
-        const response = await fetch(`${API_URL}/user/signup`, {
-            method: "POST",
-            body: JSON.stringify({
-                name: username,
-                email: email,
-                password: password,
-            }),
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
+async function authenticate(path: string, body: Record<string, string>, fallbackMessage: string) {
+  const response = await fetch(`${API_URL}/user/${path}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
 
-        const data = await response.json();
-        localStorage.setItem("token", data.token);
+  const data = await response.json();
+  if (!response.ok) throw new Error(data.message || fallbackMessage);
 
-        if (!response.ok) {
-            throw new Error(data.message || "Failed to sign up user");
-        }
+  localStorage.setItem("token", data.token);
+  return data;
+}
 
-        return data;
-    } catch (error) {
-        console.error("Error signing up user:", error);
-        throw error;
-    }
-};
+export const signupUser = (username: string, email: string, password: string) =>
+  authenticate("signup", { name: username, email, password }, "Failed to sign up user");
 
-export const loginUser = async (email: string, password: string) => {
-    try {
-        const response = await fetch(`${API_URL}/user/login`, {
-            method: "POST",
-            body: JSON.stringify({
-                email: email,
-                password: password,
-            }),
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
-
-        const data = await response.json();
-        localStorage.setItem("token", data.token);
-
-        if (!response.ok) {
-            throw new Error(data.message || "Failed to log in user");
-        }
-
-        return data;
-    } catch (error) {
-        console.error("Error logging in user:", error);
-        throw error;
-    }
-};
+export const loginUser = (email: string, password: string) =>
+  authenticate("login", { email, password }, "Failed to log in user");

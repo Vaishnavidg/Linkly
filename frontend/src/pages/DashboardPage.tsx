@@ -1,308 +1,129 @@
-import { Link2, MousePointerClick } from "lucide-react";
-import { useEffect, useState } from "react";
-
-import {
-  Box,
-  Button,
-  Container,
-  Paper,
-  Typography,
-  Stack,
-  CircularProgress,
-} from "@mui/material";
-import Header from "../components.tsx/Header";
-import { UrlResult } from "../components.tsx/UrlResult";
-import { UrlInput } from "../components.tsx/UrlInput";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { UrlTable } from "../components.tsx/UrlTable";
-import { StatCard } from "../components.tsx/StatCard";
-import { useAuth } from "../hook/auth";
-import { getShortUrlApiUrl, getUserUrls } from "../api/URL";
+import { Alert, Box, CircularProgress, Snackbar, Stack, Typography } from "@mui/material";
+import AdsClickIcon from "@mui/icons-material/AdsClick";
+import LinkIcon from "@mui/icons-material/Link";
+
+import { useAuth } from "../hooks/useAuth";
+import { useUserUrls } from "../hooks/useUserUrls";
+import { CREATE_URL_INPUT_ID, clicksOf, stripProtocol } from "../lib/links";
+import { MUTED_TEXT, PAGE_BG } from "../theme/tokens";
+import { copyToClipboard } from "../lib/clipboard";
+import { StatCard } from "../components/dashboard/StatCard";
+import type { NavId } from "../components/dashboard/SidebarContent";
+import { CreateLinkCard } from "../components/dashboard/CreateLinkCard";
+import { DashboardHeader } from "../components/dashboard/DashboardHeader";
+import { DashboardSidebar } from "../components/dashboard/DashboardSidebar";
+import { MyLinksCard } from "../components/dashboard/MyLinksCard";
 
 export default function DashboardPage() {
   const { user, ready, signOut } = useAuth();
-  console.log("DashboardPage user:", user);
   const navigate = useNavigate();
-  const [url, setUrl] = useState("");
-  const [result, setResult] = useState<string | null>(null);
-  const [createError, setCreateError] = useState<string | null>(null);
-  const [creating, setCreating] = useState(false);
-  const [loadingUrls, setLoadingUrls] = useState(false);
-  const [urls, setUserUrls] = useState([]);
-  const [totalClicks, setTotalClicks] = useState(0);
-  const [refreshUrls, setRefreshUrls] = useState(0);
+  const { urls, loading, error, refresh } = useUserUrls(user?.id);
+
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [activeNav, setActiveNav] = useState<NavId>("overview");
+  const [toast, setToast] = useState("");
 
   useEffect(() => {
-    if (ready && !user) {
-      void navigate("/");
-    }
+    if (ready && !user) void navigate("/");
   }, [ready, user, navigate]);
 
-  async function handleCreate() {
-    console.log("Creating short URL for:", url);
-    setCreateError(null);
-    setCreating(true);
-    try {
-      const result = await getShortUrlApiUrl(url);
+  const totalClicks = useMemo(() => urls.reduce((sum, item) => sum + clicksOf(item), 0), [urls]);
 
-      console.log("Short URL result:", result);
-      if (!result) {
-        throw new Error("Failed to shorten the URL. Please try again.");
-      }
+  const copy = async (value: string) => {
+    const ok = await copyToClipboard(value);
+    setToast(ok ? `Copied ${stripProtocol(value)} to clipboard` : "Unable to copy. Please copy the link manually.");
+  };
 
-      setResult(result.shortId);
-      setUrl("");
-      setRefreshUrls((prev) => prev + 1);
-    } catch (err) {
-      setCreateError(
-        err instanceof Error
-          ? err.message
-          : "Could not shorten that URL. Please try again."
-      );
-    } finally {
-      setCreating(false);
-    }
-  }
+  const focusCreateInput = () => {
+    const input = document.getElementById(CREATE_URL_INPUT_ID);
+    input?.scrollIntoView({ behavior: "smooth", block: "center" });
+    input?.focus();
+  };
 
-  useEffect(() => {
-    if (!user) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setUserUrls([]);
-      return;
-    }
-    const fetchUserUrls = async () => {
-      console.log("get user's urls", user);
-      setCreateError(null);
-      setLoadingUrls(true);
-      try {
-        const result = await getUserUrls();
-        console.log("data from get users urls", result.data);
-        setUserUrls(result.data);
+  const scrollToSection = (id: NavId) => {
+    const section = document.getElementById(id);
+    section?.scrollIntoView({ behavior: "smooth", block: "center" });
+    section?.focus({ preventScroll: true });
+  };
 
-        setLoadingUrls(false);
-      } catch (err) {
-        setCreateError(
-          err instanceof Error
-            ? err.message
-            : "Could not get urls. Please try again."
-        );
-      } finally {
-        setLoadingUrls(false);
-      }
-    };
-
-    fetchUserUrls();
-  }, [user, refreshUrls]);
-
-  useEffect(() => {
-    const totalClicks = urls.reduce(
-      (sum, url) => sum + url.visitHistory.length,
-      0
-    );
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setTotalClicks(totalClicks);
-  }, [urls]);
-
-  // Authentication Loading State
   if (!ready || !user) {
     return (
-      <Box
-        sx={{
-          minHeight: "100vh",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          bgcolor: "background.default",
-        }}
-      >
+      <Box sx={{ minHeight: "100vh", display: "grid", placeItems: "center", bgcolor: PAGE_BG }}>
         <CircularProgress size={28} />
       </Box>
     );
   }
 
+  const firstName = user.name?.split(" ")[0] || user.email.split("@")[0];
+
   return (
-    <Box
-      sx={{
-        minHeight: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        bgcolor: "background.default",
-      }}
-    >
-      <Header dashboard signOut={signOut} />
-
-      <Container
-        component="main"
-        maxWidth="lg"
-        sx={{
-          flex: 1,
-          py: 4,
-          px: { xs: 2, sm: 3 },
+    <Box sx={{ display: "flex", minHeight: "100vh", bgcolor: PAGE_BG, color: "text.primary" }}>
+      <DashboardSidebar
+        drawerOpen={drawerOpen}
+        onCloseDrawer={() => setDrawerOpen(false)}
+        active={activeNav}
+        onNavigate={(id) => {
+          setActiveNav(id);
+          setDrawerOpen(false);
+          scrollToSection(id);
         }}
-      >
-        {/* Dashboard Heading */}
-        <Box sx={{ mb: 4 }}>
-          <Typography
-            variant="h4"
-            sx={{
-              letterSpacing: "-0.5px",
-              fontWeight: 700,
-              color: "primary.main",
-            }}
-          >
-            Dashboard
-          </Typography>
+        name={user.name}
+        email={user.email}
+        onSignOut={signOut}
+      />
 
-          <Typography variant="body2" sx={{ mt: 0.5, color: "text.primary" }}>
-            Signed in as {user?.email}
-          </Typography>
-        </Box>
+      <Box sx={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column" }}>
+        <DashboardHeader email={user.email} onOpenMenu={() => setDrawerOpen(true)} onCreateLink={focusCreateInput} />
 
-        {/* Statistics Cards */}
-        <Box
-          sx={{
-            display: "grid",
-            gridTemplateColumns: {
-              xs: "1fr",
-              sm: "repeat(3, 1fr)",
-            },
-            gap: 2,
-            mb: 4,
-          }}
+        <Stack
+          component="main"
+          id="overview"
+          tabIndex={-1}
+          spacing={3}
+          sx={{ outline: "none", flex: 1, width: "100%", maxWidth: 1152, mx: "auto", p: { xs: 2, sm: 3, lg: 4 }, scrollMarginTop: 80 }}
         >
-          <StatCard label="Total Links" value={urls.length} icon={Link2} />
-
-          <StatCard
-            label="Total Clicks"
-            value={totalClicks}
-            icon={MousePointerClick}
-          />
-        </Box>
-
-        {/* Create Short URL Section */}
-        <Paper
-          elevation={0}
-          sx={{
-            p: { xs: 2.5, sm: 3 },
-            mb: 4,
-            border: 1,
-            borderColor: "divider",
-            borderRadius: 3,
-            bgcolor: "background.paper",
-          }}
-        >
-          <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
-            Create a short URL
-          </Typography>
-
-          {result ? (
-            <UrlResult shortUrl={result} onReset={() => setResult(null)} />
-          ) : (
-            <UrlInput
-              value={url}
-              onChange={setUrl}
-              onSubmit={handleCreate}
-              loading={creating}
-              error={createError}
-              placeholder="https://example.com/a-very-long-url"
-            />
-          )}
-        </Paper>
-
-        {/* My Links Section */}
-        <Paper
-          elevation={0}
-          sx={{
-            border: 1,
-            borderColor: "divider",
-            borderRadius: 3,
-            bgcolor: "background.paper",
-            overflow: "hidden",
-          }}
-        >
-          {/* Section Header */}
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              px: { xs: 2.5, sm: 3 },
-              py: 2,
-              borderBottom: 1,
-              borderColor: "divider",
-            }}
-          >
-            <Typography variant="h6" sx={{ fontWeight: 600 }}>
-              My Links
+          <Box>
+            <Typography component="h2" sx={{ fontSize: 24, lineHeight: "32px", fontWeight: 600, letterSpacing: "-0.25px" }}>
+              Welcome back, {firstName}
             </Typography>
-
-            <Typography variant="body2" color="text.secondary">
-              {urls.length} {urls.length === 1 ? "link" : "links"}
+            <Typography sx={{ fontSize: 14, color: MUTED_TEXT }}>
+              Create new short links and monitor click performance across your workspace.
             </Typography>
           </Box>
-          {/* Loading State */}
-          {loadingUrls ? (
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                py: 6,
-              }}
-            >
-              <CircularProgress size={24} />
-            </Box>
-          ) : urls.length === 0 ? (
-            /* Empty State */
-            <Stack
-              spacing={1}
-              sx={{
-                px: 3,
-                py: 6,
-                textAlign: "center",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <Typography sx={{ fontWeight: 600, color: "text.primary" }}>
-                No links yet
-              </Typography>
 
-              <Typography variant="body2" color="text.secondary">
-                Create your first short URL above and it will appear here.
-              </Typography>
-            </Stack>
-          ) : (
-            /* URL Table */
-            <UrlTable
-              urls={urls}
-              // onDelete={handleDelete}
-              // deletingId={deletingId}
-            />
-          )}
-        </Paper>
-
-        {/* Mobile Logout Button */}
-        <Box
-          sx={{
-            display: { xs: "flex", sm: "none" },
-            justifyContent: "center",
-            mt: 3,
-          }}
-        >
-          <Button
-            variant="outlined"
-            size="small"
-            // onClick={signOut}
-            sx={{
-              textTransform: "none",
-              fontWeight: 600,
-            }}
+          <Box
+            component="section"
+            aria-label="Overview statistics"
+            sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" }, gap: { xs: 2, sm: 3 } }}
           >
-            Log out
-          </Button>
-        </Box>
-      </Container>
+            <StatCard label="Total Links" value={urls.length} icon={<LinkIcon />} />
+            <StatCard label="Total Clicks" value={totalClicks} icon={<AdsClickIcon />} />
+          </Box>
+
+          <CreateLinkCard
+            onCopy={copy}
+            onCreated={() => {
+              setToast("Short link created");
+              refresh();
+            }}
+          />
+
+          <MyLinksCard urls={urls} loading={loading} error={error} onCopy={copy} />
+        </Stack>
+      </Box>
+
+      <Snackbar
+        open={Boolean(toast)}
+        autoHideDuration={2500}
+        onClose={() => setToast("")}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+      >
+        <Alert onClose={() => setToast("")} severity="success" variant="filled">
+          {toast}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 }

@@ -1,50 +1,22 @@
-const MONGO_URI = process.env.MONGO_URI || "";
+import type { NextFunction, Response } from "express";
 
-import { Request, Response, NextFunction } from "express";
-import jwt from "jsonwebtoken";
+import type { AuthRequest } from "../types/auth.js";
+import { HttpError } from "../utils/httpError.js";
+import { verifyJwt } from "../utils/jwt.js";
 
-interface JwtPayload {
-    userId: string;
-}
+/** Requires `Authorization: Bearer <jwt>` and exposes the user id as `req.userId`. */
+export const verifyToken = (req: AuthRequest, _res: Response, next: NextFunction): void => {
+  const authHeader = req.headers.authorization;
 
+  if (!authHeader?.startsWith("Bearer ")) {
+    throw new HttpError(401, "Authentication token required");
+  }
 
-export interface AuthRequest extends Request {
-    userId?: string;
-}
+  try {
+    req.userId = verifyJwt(authHeader.slice("Bearer ".length)).userId;
+  } catch {
+    throw new HttpError(401, "Invalid or expired token");
+  }
 
-export const verifyToken = (
-    req: AuthRequest,
-    res: Response,
-    next: NextFunction
-) => {
-    try {
-        const authHeader = req.headers.authorization;
-
-        if (!authHeader || !authHeader.startsWith("Bearer ")) {
-            return res.status(401).json({
-                message: "Authentication token required"
-            });
-        }
-
-        const token = authHeader.split(" ")[1];
-
-        console.log("Verifying token:", token);
-
-        const decoded = jwt.verify(
-            token,
-            MONGO_URI
-        ) as JwtPayload;
-
-        console.log("Decoded token:", decoded);
-
-        req.userId = decoded.userId;
-        console.log("Token verified, userId:", req.userId);
-
-        next();
-
-    } catch (error) {
-        return res.status(401).json({
-            message: "Invalid or expired token"
-        });
-    }
+  next();
 };

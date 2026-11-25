@@ -1,28 +1,25 @@
-import express from 'express';
-import urlRoutes from './routes/url.js';
-import userRoutes from './routes/user.js';
-import cors from 'cors';
+import cors from "cors";
+import express from "express";
+
+import { env } from "./config/env.js";
+import { errorHandler, notFoundHandler } from "./middleware/error.middleware.js";
+import routes from "./routes/index.js";
+
 const app = express();
-import dotenv from "dotenv";
 
-
-// Enable CORS
 app.use(
   cors({
-    origin: "https://linkly-olive.vercel.app",
+    origin: env.CLIENT_ORIGINS,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
-
-dotenv.config();
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use('/', urlRoutes);
-app.use('/user', userRoutes);
+app.use(routes);
 
-
+app.use(notFoundHandler);
+app.use(errorHandler);
 
 export default app;

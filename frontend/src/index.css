@@ -4,10 +4,6 @@
   --bg: #fff;
   --border: #e5e4e7;
   --code-bg: #f4f3ec;
-   /* Primary / Accent */
-   --accent: #9e23fc;
-   --accent-bg: rgba(158, 35, 252, 0.1);
-   --accent-border: rgba(158, 35, 252, 0.5);
   --accent: #9e23fc;
   --accent-bg: rgba(170, 59, 255, 0.1);
   --accent-border: rgba(170, 59, 255, 0.5);
@@ -54,12 +50,15 @@
   }
 }
 
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+  overflow-x: hidden;
+}
+
 #root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
+  width: 100%;
   min-height: 100svh;
   display: flex;
   flex-direction: column;
@@ -68,6 +67,12 @@
 
 body {
   margin: 0;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
 h1,

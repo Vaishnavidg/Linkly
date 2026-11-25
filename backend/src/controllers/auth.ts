@@ -1,6 +1,6 @@
 import { Response } from "express";
-import { AuthRequest } from "../middleware/auth.middleware.js";
-import UserModel from "../models/users.js";
+import type { AuthRequest } from "../types/auth.js";
+import UserModel from "../models/user.model.js";
 
 export const handleGetCurrentUser = async (
     req: AuthRequest,
