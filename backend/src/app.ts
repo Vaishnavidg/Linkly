@@ -13,7 +13,7 @@ dotenv.config();
 // Enable CORS
 app.use(
     cors({
-      origin: process.env.Frontend_API || "http://localhost:5173",
+      origin: ["https://linkly-olive.vercel.app/", "http://localhost:5173"],
       methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
       allowedHeaders: ["Content-Type", "Authorization"],
     })

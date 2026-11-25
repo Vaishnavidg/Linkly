@@ -14,6 +14,7 @@ export const getShortUrlApiUrlWithoutSignIn = async(url: string) => {
       if (!normalized) {
           throw new Error("Please enter a valid URL, e.g. https://example.com");
       }
+      console.log()
       const response = await fetch(`${API_URL}/urls`, {
           method: "POST",
           headers: {
