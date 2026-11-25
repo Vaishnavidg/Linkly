@@ -9,7 +9,7 @@ import dotenv from "dotenv";
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
+dotenv.config();
 // Enable CORS
 app.use(
     cors({
@@ -22,6 +22,6 @@ app.use(
 app.use('/', urlRoutes);
 app.use('/user', userRoutes);
 
-dotenv.config();
+
 
 export default app;
