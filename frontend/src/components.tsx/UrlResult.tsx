@@ -21,7 +21,7 @@ export async function copyToClipboard(text: string): Promise<boolean> {
   }
 }
 
-const MAIN_API = "http://localhost:8000/";
+const API_URL = import.meta.env.VITE_BACKEND_API_URL || "";
 
 export function UrlResult({ shortUrl, onReset }: UrlResultProps) {
   const [copied, setCopied] = useState(false);
@@ -40,7 +40,7 @@ export function UrlResult({ shortUrl, onReset }: UrlResultProps) {
   async function handleCopy() {
     setCopyError(false);
 
-    const success = await copyToClipboard(MAIN_API + shortUrl);
+    const success = await copyToClipboard(API_URL + "/" + shortUrl);
 
     if (success) {
       setCopied(true);
@@ -90,7 +90,7 @@ export function UrlResult({ shortUrl, onReset }: UrlResultProps) {
             textAlign: "left",
           }}
         >
-          {MAIN_API + shortUrl}
+          {API_URL + "/" + shortUrl}
         </Typography>
 
         <Button

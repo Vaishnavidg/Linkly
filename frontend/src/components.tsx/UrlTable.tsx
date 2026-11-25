@@ -22,13 +22,13 @@ interface UrlTableProps {
   urls: ShortUrl[];
 }
 
-const MAIN_API = "http://localhost:8000/";
+const API_URL = import.meta.env.VITE_BACKEND_API_URL || "";
 
 export function UrlTable({ urls }: UrlTableProps) {
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
   async function handleCopy(url: ShortUrl) {
-    const ok = await copyToClipboard(MAIN_API + url.shortId);
+    const ok = await copyToClipboard(API_URL + "/" + url.shortId);
     if (ok) {
       setCopiedId(url.id);
       window.setTimeout(
@@ -119,7 +119,7 @@ export function UrlTable({ urls }: UrlTableProps) {
               <TableCell sx={{ maxWidth: 180 }}>
                 <Box
                   component="a"
-                  href={MAIN_API + url.shortId}
+                  href={API_URL + "/" + url.shortId}
                   target="_blank"
                   rel="noopener noreferrer"
                   sx={{
@@ -136,7 +136,7 @@ export function UrlTable({ urls }: UrlTableProps) {
                     },
                   }}
                 >
-                  {MAIN_API + url.shortId}
+                  {API_URL + "/" + url.shortId}
                 </Box>
               </TableCell>
 
