@@ -1,4 +1,4 @@
-const MONGO_URI = process.env.MONGO_URI || "";
+const MONGO_URI = process.env.MONGO_URI || "mongodb://localhost:27017/";
 
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";

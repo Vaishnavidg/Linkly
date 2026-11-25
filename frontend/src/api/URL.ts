@@ -1,8 +1,13 @@
 import { normalizeUrl } from "../lib/url";
 
-const API_URL = import.meta.env.VITE_BACKEND_API_URL || "";
+const API_URL = import.meta.env.VITE_BACKEND_API_URL || "http://localhost:8000";
 
-const token = localStorage.getItem("token");
+// Read at call time: a module-level read runs before sign-in and stays null.
+const getToken = () => localStorage.getItem("token");
+const authHeader = (): Record<string, string> => {
+  const token = getToken();
+  return token ? { Authorization: `Bearer ${token}` } : {};
+};
 
 export const getShortUrlApiUrlWithoutSignIn = async(url: string) => {
   console.log("url", url);
@@ -58,11 +63,7 @@ export const getShortUrlApiUrl = async(url: string) => {
               }),
             headers: {
                 "Content-Type": "application/json",
-                ...(
-                  token && {
-                    "Authorization":`Bearer ${token}`
-                  }
-                )
+                ...authHeader()
             },
 
         });
@@ -90,11 +91,7 @@ export const getUserUrls = async() => {
       method: "GET",
       headers: {
           "Content-Type": "application/json",
-          ...(
-            token && {
-              "Authorization":`Bearer ${token}`
-            }
-          )
+          ...authHeader()
       },
     
   });

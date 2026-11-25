@@ -9,7 +9,7 @@ import dotenv from "dotenv";
 // Enable CORS
 app.use(
   cors({
-    origin: "https://linkly-olive.vercel.app",
+    origin: ["https://linkly-olive.vercel.app","http://localhost:5173"],
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })

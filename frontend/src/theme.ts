@@ -22,6 +22,7 @@ export const theme = createTheme({
   },
   typography: {
     fontFamily: [
+      '"Instrument Sans"',
       "system-ui",
       "Segoe UI",
       "Roboto",
