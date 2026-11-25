@@ -5,10 +5,6 @@ import cors from 'cors';
 const app = express();
 import dotenv from "dotenv";
 
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
 dotenv.config();
 // Enable CORS
 app.use(
@@ -18,6 +14,9 @@ app.use(
       allowedHeaders: ["Content-Type", "Authorization"],
     })
   );
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use('/', urlRoutes);
 app.use('/user', userRoutes);
