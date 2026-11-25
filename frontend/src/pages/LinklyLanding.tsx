@@ -39,7 +39,8 @@ import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import AdsClickIcon from "@mui/icons-material/AdsClick";
 import CheckIcon from "@mui/icons-material/Check";
-import { getShortUrlApiUrlWithoutSignIn } from "../api/URL";
+import { API_URL } from "../api/config";
+import { getShortUrlApiUrlWithoutSignIn } from "../api/urls";
 import { normalizeUrl } from "../lib/url";
 
 /* ----------------------------- Types ----------------------------- */
@@ -61,7 +62,6 @@ interface InfoItem {
   text: string;
 }
 
-const API_URL = import.meta.env.VITE_BACKEND_API_URL || "http://localhost:8000";
 const PAGE_BG = "#FAFAFC";
 const SURFACE_MUTED = "#F4F4F5";
 const MONO = '"JetBrains Mono", ui-monospace, Consolas, monospace';
@@ -244,7 +244,6 @@ export default function LinklyLanding({
       const result = await getShortUrlApiUrlWithoutSignIn(normalized);
       if (!result?.shortId)
         throw new Error("The API did not return a short URL.");
-      console.log(API_URL);
       setShortUrl(`${API_URL}/${result.shortId}`);
       setToast("Your short link is ready!");
     } catch (e) {

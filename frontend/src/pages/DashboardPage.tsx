@@ -4,17 +4,17 @@ import { Alert, Box, CircularProgress, Snackbar, Stack, Typography } from "@mui/
 import AdsClickIcon from "@mui/icons-material/AdsClick";
 import LinkIcon from "@mui/icons-material/Link";
 
-import { useAuth } from "../hook/auth";
-import { useUserUrls } from "../hook/useUserUrls";
+import { useAuth } from "../hooks/useAuth";
+import { useUserUrls } from "../hooks/useUserUrls";
 import { CREATE_URL_INPUT_ID, clicksOf, stripProtocol } from "../lib/links";
-import { MUTED_TEXT, PAGE_BG } from "../lib/tokens";
-import { copyToClipboard } from "../components.tsx/UrlResult";
-import { StatCard } from "../components.tsx/StatCard";
-import type { NavId } from "../components.tsx/SidebarContent";
-import { CreateLinkCard } from "../components.tsx/dashboard/CreateLinkCard";
-import { DashboardHeader } from "../components.tsx/dashboard/DashboardHeader";
-import { DashboardSidebar } from "../components.tsx/dashboard/DashboardSidebar";
-import { MyLinksCard } from "../components.tsx/dashboard/MyLinksCard";
+import { MUTED_TEXT, PAGE_BG } from "../theme/tokens";
+import { copyToClipboard } from "../lib/clipboard";
+import { StatCard } from "../components/dashboard/StatCard";
+import type { NavId } from "../components/dashboard/SidebarContent";
+import { CreateLinkCard } from "../components/dashboard/CreateLinkCard";
+import { DashboardHeader } from "../components/dashboard/DashboardHeader";
+import { DashboardSidebar } from "../components/dashboard/DashboardSidebar";
+import { MyLinksCard } from "../components/dashboard/MyLinksCard";
 
 export default function DashboardPage() {
   const { user, ready, signOut } = useAuth();

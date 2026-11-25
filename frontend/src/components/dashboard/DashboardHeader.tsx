@@ -3,7 +3,7 @@ import AddLinkIcon from "@mui/icons-material/AddLink";
 import MenuIcon from "@mui/icons-material/Menu";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 
-import { MUTED_TEXT, OUTLINE, PAGE_BG, iconButtonSx } from "../../lib/tokens";
+import { MUTED_TEXT, OUTLINE, PAGE_BG, iconButtonSx } from "../../theme/tokens";
 
 interface DashboardHeaderProps {
   email: string;

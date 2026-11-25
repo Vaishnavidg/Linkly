@@ -13,10 +13,10 @@ import { Link, useNavigate } from "react-router-dom";
 import {
   signinSchema,
   type SigninFormData,
-} from "../validators/auth.validator";
+} from "../../validators/auth.validator";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginUser } from "../api/user";
+import { loginUser } from "../../api/user";
 
 export function LoginForm() {
   const navigate = useNavigate();
@@ -37,13 +37,11 @@ export function LoginForm() {
 
   async function onSubmit(data: SigninFormData) {
     event.preventDefault();
-    console.log("Form submitted with data:", data);
     setError(null);
     setLoading(true);
 
     try {
-      const response = await loginUser(data.email, data.password);
-      console.log("Login successful:", response);
+      await loginUser(data.email, data.password);
       await navigate("/dashboard");
     } catch (err) {
       setError(

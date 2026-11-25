@@ -4,7 +4,7 @@ import LinkIcon from "@mui/icons-material/Link";
 import DashboardOutlinedIcon from "@mui/icons-material/DashboardOutlined";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { MUTED_TEXT, ON_PRIMARY_SOFT, OUTLINE, PRIMARY_SOFT, SURFACE_MUTED } from "../lib/tokens";
+import { MUTED_TEXT, ON_PRIMARY_SOFT, OUTLINE, PRIMARY_SOFT, SURFACE_MUTED } from "../../theme/tokens";
 
 const NAV_ITEMS = [
   { id: "overview", label: "Overview", icon: <DashboardOutlinedIcon fontSize="small" /> },

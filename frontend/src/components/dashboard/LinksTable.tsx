@@ -2,7 +2,7 @@ import { IconButton, Table, TableBody, TableCell, TableContainer, TableHead, Tab
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
 import { clicksOf, formatDate, shortLink, stripProtocol } from "../../lib/links";
-import { MONO, MUTED_TEXT, OUTLINE, PAGE_BG, iconButtonSx } from "../../lib/tokens";
+import { MONO, MUTED_TEXT, OUTLINE, PAGE_BG, iconButtonSx } from "../../theme/tokens";
 import type { ShortUrl } from "../../types/index";
 
 const headCellSx = {

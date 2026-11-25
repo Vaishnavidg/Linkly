@@ -2,7 +2,7 @@ import { Box, Button, Stack, Typography } from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
 import { clicksOf, formatDate, shortLink, stripProtocol } from "../../lib/links";
-import { MONO, MUTED_TEXT, OUTLINE } from "../../lib/tokens";
+import { MONO, MUTED_TEXT, OUTLINE } from "../../theme/tokens";
 import type { ShortUrl } from "../../types/index";
 
 interface LinksCardListProps {

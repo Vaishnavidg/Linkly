@@ -13,12 +13,12 @@ import {
   Stack,
 } from "@mui/material";
 
-import { signupUser } from "../api/user";
+import { signupUser } from "../../api/user";
 
 import {
   signupSchema,
   type SignupFormData,
-} from "../validators/auth.validator";
+} from "../../validators/auth.validator";
 
 export function SignupForm() {
   const navigate = useNavigate();
@@ -40,10 +40,7 @@ export function SignupForm() {
     setLoading(true);
 
     try {
-      const response = await signupUser(data.name, data.email, data.password);
-
-      console.log("Signup successful:", response);
-
+      await signupUser(data.name, data.email, data.password);
       navigate("/dashboard");
     } catch (err) {
       setError(

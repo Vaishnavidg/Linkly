@@ -1,8 +1,8 @@
 import { Box, Drawer, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
-import { SidebarContent, type SidebarProps } from "../SidebarContent";
-import { OUTLINE, iconButtonSx } from "../../lib/tokens";
+import { SidebarContent, type SidebarProps } from "./SidebarContent";
+import { OUTLINE, iconButtonSx } from "../../theme/tokens";
 
 const SIDEBAR_WIDTH = 240;
 

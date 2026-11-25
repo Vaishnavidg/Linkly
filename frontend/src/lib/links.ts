@@ -1,6 +1,6 @@
 import { format } from "date-fns";
 
-import { API_URL } from "../api/URL";
+import { API_URL } from "../api/config";
 import type { ShortUrl } from "../types/index";
 
 /** Id of the dashboard's "create short URL" input, so other parts can focus it. */

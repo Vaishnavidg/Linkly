@@ -1,7 +1,7 @@
 import { Link2 } from "lucide-react";
 import { Box, Container, Typography, Paper, Stack } from "@mui/material";
 import { Link } from "react-router-dom";
-import { LoginForm } from "../components.tsx/LoginForm";
+import { LoginForm } from "../components/auth/LoginForm";
 
 export default function SignInPage() {
   return (

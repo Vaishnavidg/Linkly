@@ -5,9 +5,10 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import ErrorOutlinedIcon from "@mui/icons-material/ErrorOutlined";
 import LanguageIcon from "@mui/icons-material/Language";
 
-import { API_URL, getShortUrlApiUrl } from "../../api/URL";
+import { API_URL } from "../../api/config";
+import { getShortUrlApiUrl } from "../../api/urls";
 import { CREATE_URL_INPUT_ID, stripProtocol } from "../../lib/links";
-import { MONO, MUTED_TEXT, OUTLINE, outlinedFieldSx } from "../../lib/tokens";
+import { MONO, MUTED_TEXT, OUTLINE, outlinedFieldSx } from "../../theme/tokens";
 
 const SUCCESS_TEXT = "#166534";
 

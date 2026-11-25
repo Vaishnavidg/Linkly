@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { getUserUrls } from "../api/URL";
+import { getUserUrls } from "../api/urls";
 import type { ShortUrl } from "../types/index";
 
 /** Loads the signed-in user's short URLs. Call `refresh()` after creating one. */

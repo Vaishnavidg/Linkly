@@ -6,7 +6,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import { LinksCardList } from "./LinksCardList";
 import { LinksTable } from "./LinksTable";
 import { shortLink } from "../../lib/links";
-import { MONO, MUTED_TEXT, OUTLINE, SURFACE_MUTED, outlinedFieldSx } from "../../lib/tokens";
+import { MONO, MUTED_TEXT, OUTLINE, SURFACE_MUTED, outlinedFieldSx } from "../../theme/tokens";
 import type { ShortUrl } from "../../types/index";
 
 interface MyLinksCardProps {

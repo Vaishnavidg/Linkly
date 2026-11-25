@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 
 import { Box, Paper, Stack, Typography } from "@mui/material";
 
-import { MUTED_TEXT, OUTLINE, PRIMARY_SOFT } from "../lib/tokens";
+import { MUTED_TEXT, OUTLINE, PRIMARY_SOFT } from "../../theme/tokens";
 
 interface StatCardProps {
   label: string;

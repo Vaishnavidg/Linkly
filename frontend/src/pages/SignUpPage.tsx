@@ -1,31 +1,7 @@
-// import { createFileRoute, Link } from "@tanstack/react-router";
 import { Link2 } from "lucide-react";
-
-// import { SignupForm } from "@/components/SignupForm";
-
 import { Box, Container, Typography, Paper, Stack } from "@mui/material";
 import { Link } from "react-router-dom";
-import { SignupForm } from "../components.tsx/SignupForm";
-
-//  const Route = createFileRoute("/signup")({
-//   head: () => ({
-//     meta: [
-//       { title: "Create Account – Linkly" },
-//       {
-//         name: "description",
-//         content: "Create a free Linkly account to manage your shortened links.",
-//       },
-//       { property: "og:title", content: "Create Account – Linkly" },
-//       {
-//         property: "og:description",
-//         content: "Create a free Linkly account to manage your shortened links.",
-//       },
-//       { property: "og:type", content: "website" },
-//       { name: "twitter:card", content: "summary" },
-//     ],
-//   }),
-//   component: SignUpPage,
-// });
+import { SignupForm } from "../components/auth/SignupForm";
 
 export default function SignUpPage() {
   return (
