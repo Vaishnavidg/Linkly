@@ -5,15 +5,17 @@ import cors from 'cors';
 const app = express();
 import dotenv from "dotenv";
 
-dotenv.config();
+
 // Enable CORS
 app.use(
-    cors({
-      origin: ["https://linkly-olive.vercel.app/", "http://localhost:5173"],
-      methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-      allowedHeaders: ["Content-Type", "Authorization"],
-    })
-  );
+  cors({
+    origin: "https://linkly-olive.vercel.app",
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+
+dotenv.config();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
