@@ -1,16 +1,23 @@
-import express from 'express';
-import { handleGenerateShortUrl, handleGenerateShortUrlWithoutSignIn, handleRedirectToOriginalUrl, handleUsersUrls, hangleGetUrlAnalytics } from '../controllers/url.js';
-import { verifyToken } from '../middleware/auth.middleware.js';
-const router = express.Router();
+import { Router } from "express";
 
-router.post('/urls', handleGenerateShortUrlWithoutSignIn);
+import {
+  createAnonymousShortUrl,
+  createShortUrl,
+  getMyUrls,
+  getUrlAnalytics,
+  redirectToOriginalUrl,
+} from "../controllers/url.controller.js";
+import { verifyToken } from "../middleware/auth.middleware.js";
+import { validate } from "../middleware/validate.middleware.js";
+import { createUrlSchema } from "../validators/url.validator.js";
 
-router.post('/url', verifyToken, handleGenerateShortUrl);
+const router = Router();
 
-router.get('/user-urls',verifyToken, handleUsersUrls);
-
-router.get('/url/analytics/:shortId', hangleGetUrlAnalytics);
-
-router.get('/:shortId', handleRedirectToOriginalUrl);
+router.post("/urls", validate(createUrlSchema), createAnonymousShortUrl);
+router.post("/url", verifyToken, validate(createUrlSchema), createShortUrl);
+router.get("/user-urls", verifyToken, getMyUrls);
+router.get("/url/analytics/:shortId", getUrlAnalytics);
+// Must stay last: it matches any single path segment.
+router.get("/:shortId", redirectToOriginalUrl);
 
 export default router;

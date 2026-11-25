@@ -1,26 +1,20 @@
-import app from './app.js';
-import connectToDatabase from './config/connect.js';
-
-
-const port = 8000;
-const MONGO_URI: string = process.env.MONGO_URI || '';
+import app from "./app.js";
+import { assertEnv, env } from "./config/env.js";
+import { connectToDatabase } from "./config/database.js";
 
 const startServer = async () => {
-    try{
-        if (!MONGO_URI) {
-            throw new Error("MONGO_URI is missing from environment variables");
-        }
-        await connectToDatabase(MONGO_URI);
-        console.log('Connected to MongoDB');
-        app.listen(port, () => {
-            console.log('Starting server at port ' + port);
-        });
+  try {
+    assertEnv();
+    await connectToDatabase(env.MONGO_URI);
+    console.log("Connected to MongoDB");
 
-    }
-    catch(error:any) {
-        console.error('Error connecting to MongoDB:', error);
-    }
-
+    app.listen(env.PORT, () => {
+      console.log(`Server listening on port ${env.PORT}`);
+    });
+  } catch (error) {
+    console.error("Failed to start server:", error);
+    process.exit(1);
+  }
 };
 
-startServer();
+void startServer();

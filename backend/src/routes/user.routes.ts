@@ -1,16 +1,14 @@
-import express from 'express';
-import { handleUserLogin, handleUserSignup } from '../controllers/user.js';
-import { validate } from '../middleware/validate.middleware.js';
-import { signinSchema, signupSchema } from '../validators/auth.validator.js';
-import { verifyToken } from '../middleware/auth.middleware.js';
-import { handleGetCurrentUser } from '../controllers/auth.js';
+import { Router } from "express";
 
-const router = express.Router();
+import { getCurrentUser, login, signup } from "../controllers/user.controller.js";
+import { verifyToken } from "../middleware/auth.middleware.js";
+import { validate } from "../middleware/validate.middleware.js";
+import { signinSchema, signupSchema } from "../validators/auth.validator.js";
 
-router.post('/signup',validate(signupSchema),handleUserSignup);
+const router = Router();
 
-router.post('/login',validate(signinSchema),handleUserLogin);
-
-router.get("/me", verifyToken, handleGetCurrentUser);
+router.post("/signup", validate(signupSchema), signup);
+router.post("/login", validate(signinSchema), login);
+router.get("/me", verifyToken, getCurrentUser);
 
 export default router;

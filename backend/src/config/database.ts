@@ -1,12 +1,6 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
-async function connectToDatabase(url: string) {
-    try {
-        await mongoose.connect(url);
-        console.log('Connected to MongoDB');
-    } catch (error) {
-        console.error('Error connecting to MongoDB:', error);
-    }
+/** Connects to MongoDB. Rejects when the connection cannot be established. */
+export async function connectToDatabase(uri: string): Promise<void> {
+  await mongoose.connect(uri);
 }
-
-export default connectToDatabase;
