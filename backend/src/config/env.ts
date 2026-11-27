@@ -1,6 +1,6 @@
 import "dotenv/config";
 
-const DEFAULT_CLIENT_ORIGINS = ["https://linkly-olive.vercel.app", "http://localhost:5173"];
+const DEFAULT_CLIENT_ORIGINS = ["https://linkly-olive.vercel.app", "http://localhost:5173","https://linkly.vaishnavidg.com"];
 
 const MONGO_URI = process.env.MONGO_URI ?? "";
 
