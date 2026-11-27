@@ -7,6 +7,7 @@ const startServer = async () => {
     assertEnv();
     await connectToDatabase(env.MONGO_URI);
     console.log("Connected to MongoDB");
+    console.log("Allowed CORS origins:", env.CLIENT_ORIGINS.join(", "));
 
     app.listen(env.PORT, () => {
       console.log(`Server listening on port ${env.PORT}`);

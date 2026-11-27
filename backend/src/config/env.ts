@@ -12,7 +12,8 @@ export const env = {
   JWT_SECRET: process.env.JWT_SECRET || MONGO_URI,
   /** Comma-separated list of allowed browser origins (CORS). */
   CLIENT_ORIGINS: process.env.CLIENT_ORIGINS
-    ? process.env.CLIENT_ORIGINS.split(",").map((origin) => origin.trim()).filter(Boolean)
+    ? // Browsers send origins without a trailing slash, so strip it to avoid silent mismatches.
+      process.env.CLIENT_ORIGINS.split(",").map((origin) => origin.trim().replace(/\/+$/, "")).filter(Boolean)
     : DEFAULT_CLIENT_ORIGINS,
 };
 
